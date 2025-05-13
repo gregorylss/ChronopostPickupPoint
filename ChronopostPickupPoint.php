@@ -226,6 +226,13 @@ class ChronopostPickupPoint extends AbstractDeliveryModuleWithState
 
         /** Check if Chronopost delivers in the asked area */
         if (null !== $prices || null !== $freeShipping) {
+
+            try {
+                $this->getPostage($country, $state);
+            }catch (\Exception $exception){
+                return false;
+            }
+
             return true;
         }
 
@@ -442,15 +449,15 @@ class ChronopostPickupPoint extends AbstractDeliveryModuleWithState
         /** If no delivery type was given, the loop should continue until the postage for each delivery types was
          *  found, then return the minimum one. Otherwise, the loop should stop after the first iteration.
          */
-        if ($deliveryArray !== null) {
-            $y = 0;
-            $postage = $this->getMinPostage($country, $cartWeight, $cartAmount, $deliveryArray[$y], $request->getSession()->getLang()->getLocale());
+        foreach ($deliveryArray as $deliveryMode) {
+            try {
+                $deliveryModePostage = $this->getMinPostage($country, $cartWeight, $cartAmount, $deliveryMode, $request->getSession()?->getLang()->getLocale());
+            } catch (\Exception $exception){
+                continue;
+            }
 
-            while (isset($deliveryArray[$y]) && !empty($deliveryArray[$y]) && null !== $deliveryArray[$y]) {
-                if ($postage > ($minPost = $this->getMinPostage($country, $cartWeight, $cartAmount, $deliveryArray[$y], $request->getSession()->getLang()->getLocale())) && $minPost !== null) {
-                    $postage = $minPost;
-                }
-                $y++;
+            if (null === $postage || $postage > $deliveryModePostage) {
+                $postage = $deliveryModePostage;
             }
         }
 
