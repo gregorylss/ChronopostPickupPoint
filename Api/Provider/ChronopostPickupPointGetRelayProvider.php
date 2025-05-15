@@ -9,7 +9,7 @@ use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Thelia\Log\Tlog;
 
 /**
- * Exemple de provider "Collection" pour retourner une liste de points relais.
+ * Provider "Collection" pour retourner une liste de points relais.
  */
 readonly class ChronopostPickupPointGetRelayProvider implements ProviderInterface
 {
