@@ -1,6 +1,6 @@
 <?php
 
-namespace ChronopostPickupPoint\Twig\Extensions;
+namespace ChronopostPickupPoint\Twig;
 
 use ChronopostPickupPoint\ChronopostPickupPoint;
 use ChronopostPickupPoint\Config\ChronopostPickupPointConst;

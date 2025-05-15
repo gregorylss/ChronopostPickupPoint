@@ -5,12 +5,15 @@ namespace ChronopostPickupPoint\Api\Resource;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ChronopostPickupPoint\Model\ChronopostPickupPointDeliveryModeI18n;
 use ChronopostPickupPoint\Model\Map\ChronopostPickupPointDeliveryModeTableMap;
 use Propel\Runtime\Map\TableMap;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\Ignore;
 use Thelia\Api\Bridge\Propel\State\PropelCollectionProvider;
 use Thelia\Api\Bridge\Propel\State\PropelItemProvider;
+use Thelia\Api\Resource\AbstractTranslatableResource;
+use Thelia\Api\Resource\I18nCollection;
 
 #[ApiResource(
     operations: [
@@ -44,7 +47,7 @@ use Thelia\Api\Bridge\Propel\State\PropelItemProvider;
     normalizationContext: ['groups' => [self::GROUP_FRONT_READ]],
     denormalizationContext: ['groups' => [self::GROUP_FRONT_WRITE]]
 )]
-class ChronopostPickupPointDeliveryMode
+class ChronopostPickupPointDeliveryMode extends AbstractTranslatableResource
 {
     public const GROUP_ADMIN_READ = 'admin:chronopost_delivery_mode:read';
     public const GROUP_ADMIN_WRITE = 'admin:chronopost_delivery_mode:write';
@@ -80,6 +83,9 @@ class ChronopostPickupPointDeliveryMode
      */
     #[Groups([self::GROUP_ADMIN_READ, self::GROUP_ADMIN_WRITE, self::GROUP_FRONT_READ])]
     public ?float $freeshippingFrom = null;
+
+    #[Groups([self::GROUP_ADMIN_READ, self::GROUP_ADMIN_WRITE, self::GROUP_FRONT_READ])]
+    public I18nCollection $i18ns;
 
     /**
      * @return int|null
@@ -168,5 +174,10 @@ class ChronopostPickupPointDeliveryMode
     public static function getPropelRelatedTableMap(): ?TableMap
     {
         return new ChronopostPickupPointDeliveryModeTableMap();
+    }
+
+    public static function getI18nResourceClass(): string
+    {
+        return ChronopostPickupPointDeliveryModeI18n::class;
     }
 }
